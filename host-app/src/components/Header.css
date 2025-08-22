@@ -1,0 +1,30 @@
+/* Header component styles - using Acuitas Design System */
+
+/* Custom styles that extend the app-bar class */
+.logo-icon img {
+  height: 2rem;
+  width: auto;
+}
+
+.logo-text {
+  color: var(--app-bar-text);
+  font-size: var(--font-size-header);
+  font-weight: var(--font-weight-header);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.logo-icon {
+  font-size: 24px;
+}
+
+.logo-text {
+  color: #ecf0f1;
+}
+

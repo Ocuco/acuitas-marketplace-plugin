@@ -1,0 +1,26 @@
+{
+  "name": "vite-mf-poc",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "bp": "npm run bp:all",
+    "bp:all": "concurrently \"npm run bp:host\" \"npm run bp:web\"",
+    "bp:host": "cd host-app && npm run bp",
+    "bp:web": "cd web-component && npm run bp",
+    "install:all": "npm install && cd acuitas-shared && npm run build && cd ../host-app && npm install && cd ../web-component && npm install",
+    "dev:all": "concurrently \"npm run dev:host\" \"npm run dev:web\"",
+    "dev:host": "cd host-app && npm run dev",
+    "dev:web": "cd web-component && npm run dev",
+    "build:all": "npm run build:web && npm run build:host",
+    "build:host": "cd host-app && npm run build",
+    "build:web": "cd web-component && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "workspaces": [
+    "host-app",
+    "web-component"
+  ]
+}

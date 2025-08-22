@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sample Web Component Demo</title>
+    <link rel="stylesheet" href="./src/index.css" />
+    <script type="module" src="/src/sample-widget.ts"></script>
+  </head>
+  <body>
+    <div style="padding: 20px;">
+      <sample-widget
+        image-id="12345"
+      ></sample-widget>
+    </div>
+
+    <script>
+      // Demo script to show how to set complex props programmatically
+      document.addEventListener('DOMContentLoaded', () => {
+        const widget = document.querySelector('sample-widget');
+        if (widget) {
+          widget.imageId = '12345';
+
+          // Handle modal events
+          widget.addEventListener('open-modal', () => {
+            console.log('Open modal requested from web component');
+            widget.isModalOpen = true;
+          });
+
+          widget.addEventListener('close-modal', () => {
+            console.log('Close modal requested from web component');
+            widget.isModalOpen = false;
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

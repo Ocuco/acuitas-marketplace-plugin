@@ -1,0 +1,32 @@
+/* Application Layout using Acuitas Design System */
+
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--background-secondary);
+  font-family: var(--font-family);
+}
+
+.app-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Custom application-specific styles that extend Acuitas Design System */
+
+/* Override hover effect for buttons to be more subtle */
+.btn:hover {
+  transform: none; /* Remove the transform effect as Acuitas handles hover states */
+}
+
+/* Additional layout utilities if needed beyond Acuitas */
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
