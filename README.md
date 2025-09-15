@@ -84,7 +84,7 @@ Each project (`host-app`, `react-component`, `web-component`) includes:
 ## 🌐 Port Configuration
 
 - **Host App**: `http://localhost:5173` (dev) / `http://localhost:4173` (preview)
-- **Web Component**: `http://localhost:9002` (both dev and preview)
+- **Web Component**: `http://localhost:9001` (both dev and preview)
 
 ### Module Federation Flow
 
@@ -114,7 +114,7 @@ The federation setup allows:
 
 ### Common Issues
 
-1. **Port Conflicts**: Ensure ports 5173, 4173, and 9002 are available
+1. **Port Conflicts**: Ensure ports 5173, 4173, and 9001 are available
 2. **Federation Loading**: Remote components must be built and running before host can load them
 3. **CORS Issues**: Use the provided scripts which handle CORS properly
 

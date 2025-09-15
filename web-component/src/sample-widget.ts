@@ -35,10 +35,10 @@ export class SampleWidget extends LitElement {
     selectedImage: null
   };
 
-  @property({ type: Function})
+  @property({ type: Function })
   onOpenModal: ((detail: ModalEventDetail) => void) | undefined;
 
-  @property({ type: Function})
+  @property({ type: Function })
   onCloseModal: ((detail: ModalEventDetail) => void) | undefined;
 
   @property({ type: Function })
@@ -57,8 +57,8 @@ export class SampleWidget extends LitElement {
         max-width: 100%;
         max-height: 100%;
       `
-      :
-      `
+        :
+        `
         max-width: ${this.screen.maxWidth}px;
         ${this.screen.maxHeight ? `max-height: ${this.screen.maxHeight}px;` : ''}
       `;
@@ -179,7 +179,7 @@ export class SampleWidget extends LitElement {
    * Dispatches a standardized modal opened event
    */
   private _openModal() {
-    if(this.onOpenModal) { 
+    if (this.onOpenModal) {
       this.onOpenModal(this._createModalEventDetail());
     }
   }
@@ -188,25 +188,102 @@ export class SampleWidget extends LitElement {
    * Dispatches a standardized modal closed event
    */
   private _closeModal() {
-    if(this.onCloseModal) { 
+    if (this.onCloseModal) {
       this.onCloseModal(this._createModalEventDetail());
     }
   }
 
-  private _analyzeImages() {
+  private async _analyzeImages() {
     // First we have to request the token to access the images  
-    if(this.onRequestToken) { 
-      const token = this.onRequestToken({
+    if (this.onRequestToken) {
+      const tokenResponse = this.onRequestToken({
         pluginId: this.id,
         pluginName: this.name,
         context: this.context,
         subjectType: 'MEDICAL-IMAGE',
-        subjectIds: this.imaging.selectedImage ? [this.imaging.selectedImage.id] : this.imaging.images.map(img => img.id),
+        subjectIds: this.imaging.selectedImage ? [this.imaging.selectedImage.id] : this.imaging.images.map((img: { id: any; }) => img.id),
       });
-      console.log('Token received:', token);
-      // Pass this token to your backend API to be used as the bearer token when calling the Acuitas Marketplace Public API
-      // TODO: add your API call here and handle the response
+      console.log('Token received:', tokenResponse);
+      
+      // Get the API URL from settings
+      const apiUrl = this.settings.apiUrl || 'http://localhost:3001';
+      
+      // Call our Node.js API to analyze images
+      await this._callImageAnalysisAPI(tokenResponse.token, apiUrl);
     }
+  }
+
+  private async _callImageAnalysisAPI(token: string, apiUrl: string) {
+    try {
+      const imageIds = this.imaging.selectedImage 
+        ? [this.imaging.selectedImage.id] 
+        : this.imaging.images.map((img: { id: any; }) => img.id);
+
+      console.log(`Calling API at ${apiUrl} for images:`, imageIds);
+
+      // Process each image
+      for (const imageId of imageIds) {
+        try {
+          const response = await fetch(`${apiUrl}/api/images/${imageId}`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const result = await response.json();
+          console.log(`Image analysis result for ${imageId}:`, result);
+
+          // Here you can process the image data returned from your API
+          if (result.success && result.data) {
+            console.log(`Successfully retrieved image: ${result.data.fileName}`);
+            console.log(`Image URL: ${result.data.url}`);
+            console.log(`Metadata:`, result.data.metadata);
+            
+            // You can dispatch custom events or update component state here
+            this._handleImageAnalysisResult(result.data);
+          }
+
+        } catch (imageError) {
+          console.error(`Error analyzing image ${imageId}:`, imageError);
+          this._handleImageAnalysisError(imageId, imageError);
+        }
+      }
+
+    } catch (error) {
+      console.error('Error calling image analysis API:', error);
+      this._handleImageAnalysisError('general', error);
+    }
+  }
+
+  private _handleImageAnalysisResult(imageData: any) {
+    // Dispatch a custom event with the analysis result
+    this.dispatchEvent(new CustomEvent('image-analysis-complete', {
+      detail: {
+        pluginId: this.id,
+        imageData: imageData,
+        timestamp: new Date().toISOString()
+      },
+      bubbles: true
+    }));
+  }
+
+  private _handleImageAnalysisError(imageId: string, error: any) {
+    // Dispatch a custom event with the error
+    this.dispatchEvent(new CustomEvent('image-analysis-error', {
+      detail: {
+        pluginId: this.id,
+        imageId: imageId,
+        error: error.message || 'Unknown error',
+        timestamp: new Date().toISOString()
+      },
+      bubbles: true
+    }));
   }
 
   static styles = unsafeCSS(styles);

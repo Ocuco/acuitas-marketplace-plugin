@@ -78,7 +78,7 @@ const DynamicRemoteApp: React.FC<DynamicRemoteProps> = ({ remoteConfig, ...props
           setRemoteComponent(() => Component);
         }
       } catch (err) {
-        console.error('Failed to load remote module:', err);
+        console.error('Failed to load remote module:', err instanceof Error ? err.message : 'Failed to load remote module');
         setError(err instanceof Error ? err.message : 'Failed to load remote module');
       } finally {
         setLoading(false);
@@ -107,7 +107,7 @@ function RightPanel() {
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const webComponentRemoteConfig: RemoteConfig = {
-    url: "http://localhost:9001/assets/remoteEntry.js", 
+    url: "http://localhost:9001/remoteEntry.js", 
     name: "sampleWidget",
     module: "./Component",
     type: "webcomponent"
