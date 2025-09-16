@@ -31,3 +31,8 @@ dist-ssr
 coverage
 kendo-ui-license.txt
 __ENV.js
+
+# Environment variables
+.env
+.env.local
+.env.*.local

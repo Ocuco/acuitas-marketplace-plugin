@@ -8,6 +8,7 @@ This solution offers third party developers an environment to develop their own 
 vite-mf-poc/
 ├── host-app/              # Main host application (React + TypeScript)
 ├── web-component/         # Remote Web component using Lit (Remote B)
+├── api-server/            # Backend API (React + TypeScript)
 ├── package.json          # Root workspace configuration
 └── README.md             # This file
 ```
@@ -17,6 +18,7 @@ vite-mf-poc/
 - **Acuitas Shared** (`acuitas-shared/`): Contains the plugin props type definition and Acuitas design system CSS
 - **Host App** (`host-app/`): Acuitas PMS shell application that dynamically loads plugins
 - **Web Component** (`web-component/`): Pure Lit-based sample web component with federation support (no React dependencies)
+- **API Server** (`api-server/`): Sample backend API that showcases how to claim a Plugin Session on the Marketplace API and get an image by its identifier using the PST
 
 ## 🚀 Quick Start
 
@@ -39,52 +41,21 @@ vite-mf-poc/
 
 ### Running the Applications
 
-#### Option 1: Run All Projects (Recommended)
 ```bash
-npm run bp
+npm run bp:all
 ```
 This command will:
 - Build and start all three applications simultaneously
 - Host app will be available at `http://localhost:4173`
-- React component at `http://localhost:4173` 
-- Web component at `http://localhost:4173`
+- Web component at `http://localhost:9001` 
+- Mock API at `http://localhost:3001`
 
-#### Option 2: Development Mode (All Projects)
-```bash
-npm run dev:all
-```
-Runs all projects in development mode with hot reloading.
+#### Required environment variables
+- `VITE_PST`: Required for the `web-component` project and must contain the value of the Plugin Session Token retrieved from the Marketplace Developer portal. These tokens will be valid for 24 hours for development purposes.
+- `PLUGIN_ID`: Required for the `api-server` project, the identifier of the plugin you're developing. You'll be assigned a plugin identifier by Ocuco, it will be available on the Marketplace Developer portal.
+- `ACUITAS_API_BASE_URL`: The public Acuitas Marketplace API url
 
-#### Option 3: Individual Project Control
-```bash
-# Run individual projects
-npm run bp:host        # Host app only
-npm run bp:web         # Web component only
-
-# Development mode for individual projects
-npm run dev:host       # Host app dev mode
-npm run dev:web        # Web component dev mode
-```
-
-## 🔧 Available Scripts
-
-### Root Level Scripts
-- `npm run bp` - Build and preview all projects
-- `npm run dev:all` - Run all projects in development mode
-- `npm run build:all` - Build all projects in correct order
-- `npm run install:all` - Install dependencies for all projects
-
-### Individual Project Scripts
-Each project (`host-app`, `react-component`, `web-component`) includes:
-- `npm run dev` - Development server
-- `npm run build` - Production build
-- `npm run preview` - Preview production build
-- `npm run bp` - Build and preview (build + preview combined)
-
-## 🌐 Port Configuration
-
-- **Host App**: `http://localhost:5173` (dev) / `http://localhost:4173` (preview)
-- **Web Component**: `http://localhost:9001` (both dev and preview)
+These environment can either be set per project using `.env` files, or set on the workstation itself. 
 
 ### Module Federation Flow
 
@@ -121,7 +92,8 @@ The federation setup allows:
 ### Build Order
 When building manually, follow this order:
 1. Build remote components first (`react-component`, `web-component`)
-2. Build host application last (`host-app`)
+2. Build host application (`host-app`)
+3. Build mock API application (`api-server`)
 
 ---
 

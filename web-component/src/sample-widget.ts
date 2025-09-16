@@ -237,15 +237,12 @@ export class SampleWidget extends LitElement {
           }
 
           const result = await response.json();
-          console.log(`Image analysis result for ${imageId}:`, result);
+          console.log(`Image analysis result for ${imageId}:`, result.data);
 
           // Here you can process the image data returned from your API
           if (result.success && result.data) {
-            console.log(`Successfully retrieved image: ${result.data.fileName}`);
-            console.log(`Image URL: ${result.data.url}`);
-            console.log(`Metadata:`, result.data.metadata);
+            console.log(`Successfully retrieved image`);
             
-            // You can dispatch custom events or update component state here
             this._handleImageAnalysisResult(result.data);
           }
 
@@ -261,29 +258,12 @@ export class SampleWidget extends LitElement {
     }
   }
 
-  private _handleImageAnalysisResult(imageData: any) {
-    // Dispatch a custom event with the analysis result
-    this.dispatchEvent(new CustomEvent('image-analysis-complete', {
-      detail: {
-        pluginId: this.id,
-        imageData: imageData,
-        timestamp: new Date().toISOString()
-      },
-      bubbles: true
-    }));
+  private _handleImageAnalysisResult(_imageData: any) {
+    // TODO: Process the image data as needed
   }
 
-  private _handleImageAnalysisError(imageId: string, error: any) {
-    // Dispatch a custom event with the error
-    this.dispatchEvent(new CustomEvent('image-analysis-error', {
-      detail: {
-        pluginId: this.id,
-        imageId: imageId,
-        error: error.message || 'Unknown error',
-        timestamp: new Date().toISOString()
-      },
-      bubbles: true
-    }));
+  private _handleImageAnalysisError(_imageId: string, _error: any) {
+    // TODO: Handle errors appropriately
   }
 
   static styles = unsafeCSS(styles);

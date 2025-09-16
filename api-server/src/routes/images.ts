@@ -1,5 +1,6 @@
-import { Router, Request, Response } from 'express';
+import e, { Router, Request, Response } from 'express';
 import axios from 'axios';
+import https from 'https';
 import { authMiddleware } from '../middleware/auth.js';
 
 const router = Router();
@@ -7,17 +8,14 @@ const router = Router();
 // Interface for image data
 interface ImageData {
   id: string;
-  fileName: string;
-  url?: string;
-  metadata?: any;
+  fileMimeType: string;
+  originalFile: string;
+  type: string;
 }
 
 // Interface for Acuitas API response
 interface AcuitasImageResponse {
-  id: string;
-  fileName: string;
-  downloadUrl: string;
-  metadata: any;
+  data: ImageData;
 }
 
 /**
@@ -39,29 +37,40 @@ router.get('/images/:identifier', authMiddleware, async (req: Request, res: Resp
       });
     }
 
+    const result = await claimMarketplaceSession(token);
+    console.log('Marketplace session claim result:', result);
+    if (!result) {
+      return res.status(401).json({
+        error: {
+          message: 'Marketplace API status: Unauthorized access',
+          statusCode: 401,
+          timestamp: new Date().toISOString()
+        }
+      });
+    }
+
     // Call Acuitas Marketplace API to get image data
-    const acuitasApiUrl = process.env.ACUITAS_API_BASE_URL || 'https://api.acuitas.com';
+    const acuitasApiUrl = process.env.ACUITAS_API_BASE_URL || 'https://euint.oh.ocuco.com';
     
     console.log(`Fetching image data for identifier: ${identifier}`);
     
     try {
+      const agent = new https.Agent({
+          rejectUnauthorized: false
+      });
       const response = await axios.get<AcuitasImageResponse>(
-        `${acuitasApiUrl}/medical-images/${identifier}`,
+        `${acuitasApiUrl}/api/v1/imaging/medicalimages/${identifier}`,
         {
+          httpsAgent: agent,
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
+            'pst': `${token}`
           },
           timeout: 10000 // 10 second timeout
         }
       );
 
-      const imageData: ImageData = {
-        id: response.data.id,
-        fileName: response.data.fileName,
-        url: response.data.downloadUrl,
-        metadata: response.data.metadata
-      };
+      console.log('Acuitas API response received', response.data);
+      const imageData: ImageData = response.data.data;
 
       console.log(`Successfully retrieved image data for: ${identifier}`);
 
@@ -123,70 +132,44 @@ router.get('/images/:identifier', authMiddleware, async (req: Request, res: Resp
   }
 });
 
-/**
- * GET /api/images
- * Lists available images (optional endpoint for testing)
- */
-router.get('/images', authMiddleware, async (req: Request, res: Response) => {
+// create a private function to claim the marketplace session using the token
+// this is to be used internally by other routes if needed
+async function claimMarketplaceSession(ticket: string): Promise<boolean> {
   try {
-    const token = (req as any).token;
-    const acuitasApiUrl = process.env.ACUITAS_API_BASE_URL || 'https://api.acuitas.com';
-    
-    console.log('Fetching image list');
-    
-    try {
-      const response = await axios.get(
-        `${acuitasApiUrl}/medical-images`,
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          timeout: 10000
-        }
-      );
-
-      res.json({
-        success: true,
-        data: response.data,
-        timestamp: new Date().toISOString()
-      });
-
-    } catch (apiError: any) {
-      console.error('Acuitas API error:', apiError.message);
-      
-      if (apiError.response) {
-        const statusCode = apiError.response.status;
-        const message = apiError.response.data?.message || 'Error fetching images from Acuitas API';
-        
-        return res.status(statusCode).json({
-          error: {
-            message,
-            statusCode,
-            timestamp: new Date().toISOString()
-          }
-        });
-      } else {
-        return res.status(503).json({
-          error: {
-            message: 'Acuitas API is unavailable',
-            statusCode: 503,
-            timestamp: new Date().toISOString()
-          }
-        });
-      }
-    }
-
-  } catch (error: any) {
-    console.error('Route error:', error);
-    res.status(500).json({
-      error: {
-        message: 'Internal server error',
-        statusCode: 500,
-        timestamp: new Date().toISOString()
-      }
+    const acuitasApiUrl = process.env.ACUITAS_API_BASE_URL || 'https://euint.oh.ocuco.com';
+    const agent = new https.Agent({
+        rejectUnauthorized: false
     });
+
+    const pluginId = process.env.PLUGIN_ID || 'retinalyze';
+    const response = await axios.post(
+      `${acuitasApiUrl}/api/v1/marketplace/plugins/${pluginId}/session/claim`,
+      {},
+      {
+        httpsAgent: agent,
+        headers: {
+          'pst': `${ticket}`
+        },
+        timeout: 5000 // 5 second timeout
+      }
+    );
+    return response.status === 200;
+  } catch (error) {
+    if(error instanceof axios.AxiosError && error.response) {
+      console.error('Acuitas API error during session claim:', error.response.status, error.response.data);
+      console.log('request headers:', error.config?.headers);
+      if(error.response?.data?.error === 'ticket.replayed') { 
+        // If the ticket has already been used, we consider the session valid
+        console.warn('Ticket has already been used, assuming valid session.');
+        return true
+      }
+      return false;
+    } else { 
+      console.error('Error claiming marketplace session:', error);
+    }
+    return false;
   }
-});
+}
+
 
 export { router as imageRouter };

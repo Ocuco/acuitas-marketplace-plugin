@@ -107,7 +107,7 @@ function RightPanel() {
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const webComponentRemoteConfig: RemoteConfig = {
-    url: "http://localhost:9001/remoteEntry.js", 
+    url: "http://localhost:9001/assets/remoteEntry.js", 
     name: "sampleWidget",
     module: "./Component",
     type: "webcomponent"
@@ -134,7 +134,7 @@ function RightPanel() {
         subjectType: detail.subjectType,
         subjectIds: detail.subjectIds,
       },
-      token: '<generated-token>'
+      token: import.meta.env.VITE_PST || 'no VITE_PST environment variable exists or no value set',
     };
   }
 
@@ -159,10 +159,7 @@ function RightPanel() {
     },
     imaging: {
       images: [
-        { id: 'IMG_CT_20240115_001', fileName: 'IMG_CT_20240115_001.jpg' },
-        { id: 'IMG_CT_20240115_002', fileName: 'IMG_CT_20240115_002.jpg' },
-        { id: 'IMG_MRI_20240116_001', fileName: 'IMG_MRI_20240116_001.jpg' },
-        { id: 'IMG_XRAY_20240117_001', fileName: 'IMG_XRAY_20240117_001.jpg' }
+        { id: '95800790-5E70-4083-BE05-59B97583F5F4', fileName: '95800790-5E70-4083-BE05-59B97583F5F4.jpg' },
       ],
       selectedImage: null
     },

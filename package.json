@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "bp": "npm run bp:all",
-    "bp:all": "concurrently \"npm run bp:host\" \"npm run bp:web\" \"npm run bp:api\"",
+    "bp:all": "concurrently \"npm run bp:web\" \"npm run bp:host\" \"npm run bp:api\"",
     "bp:host": "cd host-app && npm run bp",
     "bp:web": "cd web-component && npm run bp",
-    "bp:api": "cd api-server && npm run build",
+    "bp:api": "cd api-server && npm run dev",
     "install:all": "npm install && cd acuitas-shared && npm run build && cd ../host-app && npm install && cd ../web-component && npm install && cd ../api-server && npm install",
     "dev:all": "concurrently \"npm run dev:web\" \"npm run dev:host\" \"npm run dev:api\"",
     "dev:host": "cd host-app && npm run dev",
