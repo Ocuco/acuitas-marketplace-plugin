@@ -81,6 +81,7 @@ export interface PluginSettings {
  * Medical imaging specific properties
  */
 export interface ImagingProps {
+  patientId: string; // Patient identifier
   // Array of image objects
   images: Image[];
   selectedImage: Image | null; // Currently selected image for viewing
@@ -94,7 +95,7 @@ export interface Image {
   fileName: string;
 }
 
-export type SubjectType = 'MEDICAL-IMAGE';
+export type SubjectType = 'MEDICAL-IMAGE' | 'PATIENT-DETAILS' | 'CONFIGURATION-CAMERA';
 
 /**
  * Token request detail payload
@@ -106,8 +107,8 @@ export interface TokenRequestDetail {
   pluginName: string;
   /** Plugin context information */
   context: PluginContext;
-  /** Requested subject type */
-  subjectType: SubjectType;
+  /** Requested subject types */
+  subjectTypes: SubjectType[];
   /** Requested subject IDs */
   subjectIds: string[];
 }
@@ -156,11 +157,11 @@ export function createSamplePluginProps(overrides: Partial<PluginProps> = {}): P
       'api-key': '<api key>',
     },
     imaging: {
+      patientId: '3e87af32-a498-4174-9f59-9fa6865d4597',
       images: [
-        { id: 'IMG_CT_20240115_001', fileName: 'IMG_CT_20240115_001.jpg' },
-        { id: 'IMG_CT_20240115_002', fileName: 'IMG_CT_20240115_002.jpg' },
-        { id: 'IMG_MRI_20240116_001', fileName: 'IMG_MRI_20240116_001.jpg' },
-        { id: 'IMG_XRAY_20240117_001', fileName: 'IMG_XRAY_20240117_001.jpg' }
+        { id: '76538477-D664-4620-9BE2-40AD604CA8FC', fileName: 'IMG_CT_20240115_001.jpg' },
+        { id: '95800790-5E70-4083-BE05-59B97583F5F4', fileName: 'IMG_CT_20240115_002.jpg' },
+        { id: '43AC4C75-8EBD-4898-9513-75811300CFE7', fileName: 'IMG_MRI_20240116_001.jpg' }
       ],
       selectedImage: null
     },
@@ -173,7 +174,7 @@ export function createSamplePluginProps(overrides: Partial<PluginProps> = {}): P
           pluginId: detail.pluginId,
           pluginName: detail.pluginName,
           context: detail.context,
-          subjectType: detail.subjectType,
+          subjectTypes: detail.subjectTypes,
           subjectIds: detail.subjectIds,
         },
         token: '<generated-token>'

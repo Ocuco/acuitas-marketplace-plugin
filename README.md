@@ -2,6 +2,8 @@
 
 This solution offers third party developers an environment to develop their own Actuitas Marketplace Plugin in isolation before submitting it for review. 
 
+To view the Market Place API documentation and to get more information on how to build Acuitas Marketplace plugins please visit the [Acuitas Marketplace developer site](https://dev.ocuco.com).
+
 ## 🏗️ Project Structure
 
 ```
