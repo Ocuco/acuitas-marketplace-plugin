@@ -1,8 +1,11 @@
 import React from "react";
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 import './RightPanel.css'
 import { ImagingWebComponentWrapper } from "../ImagingWebComponentWrapper";
 import { ModalEventDetail, PluginProps, TokenRequestDetail } from '@acuitas/shared';
+import { useAppSelector } from '../store/hooks'
+import { selectImages, selectSelectedImage } from '../store/selectors'
 
 import {
   __federation_method_getRemote as getRemote,
@@ -104,8 +107,12 @@ const DynamicRemoteApp: React.FC<DynamicRemoteProps> = ({ remoteConfig, ...props
 };
 
 function RightPanel() {
-
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  
+  // Get imaging state from Redux store - this connects the RightPanel to centralized state
+  const images = useAppSelector(selectImages)
+  const selectedImage = useAppSelector(selectSelectedImage)
+  
   const webComponentRemoteConfig: RemoteConfig = {
     url: "http://localhost:9001/assets/remoteEntry.js", 
     name: "sampleWidget",
@@ -159,12 +166,16 @@ function RightPanel() {
     },
     imaging: {
       patientId: '3e87af32-a498-4174-9f59-9fa6865d4597',
-      images: [
-        { id: '95800790-5E70-4083-BE05-59B97583F5F4', fileName: '95800790-5E70-4083-BE05-59B97583F5F4.jpg' },
-        { id: '76538477-D664-4620-9BE2-40AD604CA8FC', fileName: '76538477-D664-4620-9BE2-40AD604CA8FC.jpg' },
-        { id: '43AC4C75-8EBD-4898-9513-75811300CFE7', fileName: '43AC4C75-8EBD-4898-9513-75811300CFE7.jpg' },
-      ],
-      selectedImage: null
+      // Convert Redux images to the expected Image interface format
+      images: images.map(img => ({
+        id: img.id,
+        fileName: img.name
+      })),
+      // Convert selected image to the expected format
+      selectedImage: selectedImage ? {
+        id: selectedImage.id,
+        fileName: selectedImage.name
+      } : null
     },
     onOpenModal: handleOpenModal,
     onCloseModal: handleCloseModal,
@@ -226,6 +237,41 @@ function RightPanel() {
       [sectionKey]: !prev[sectionKey]
     }))
   }
+
+  // Refs and portal node for a single shared instance of the remote app
+  const remoteNodeRef = React.useRef<HTMLDivElement | null>(null);
+  const hostContainerRef = React.useRef<HTMLDivElement | null>(null);
+  const modalContentRef = React.useRef<HTMLDivElement | null>(null);
+  const [portalReady, setPortalReady] = React.useState(false);
+
+  // Create the portal node once
+  React.useEffect(() => {
+    const node = document.createElement('div');
+    node.className = 'remote-app-wrapper';
+    remoteNodeRef.current = node;
+    // trigger a re-render so createPortal can run after the node exists
+    setPortalReady(true);
+    return () => {
+      if (remoteNodeRef.current && remoteNodeRef.current.parentNode) {
+        remoteNodeRef.current.parentNode.removeChild(remoteNodeRef.current);
+      }
+      remoteNodeRef.current = null;
+      setPortalReady(false);
+    };
+  }, []);
+
+  // Move the portal node between the tools host and the modal content when modal state changes
+  React.useEffect(() => {
+    const node = remoteNodeRef.current;
+    if (!node) return;
+
+    // Choose a target: modalContent when open, otherwise host container.
+    // If neither is present (for example tools collapsed), fall back to document.body
+    const target = isModalOpen ? (modalContentRef.current ?? document.body) : (hostContainerRef.current ?? document.body);
+    if (target && node.parentNode !== target) {
+      target.appendChild(node);
+    }
+  }, [isModalOpen]);
   return (
     <aside className="right-panel bg-secondary p-sm">
       
@@ -287,14 +333,15 @@ function RightPanel() {
         </div>
         {!collapsedSections.tools && (
           <div className="card-body p-sm">
-            <DynamicRemoteApp {...webComponentRemoteProps} remoteConfig={webComponentRemoteConfig} isModalOpen={isModalOpen} />
+            {/* host container where the shared instance will mount when modal is closed */}
+            <div ref={hostContainerRef} className="remote-host" />
           </div>
         )}
       </div>
 
       {/* Full Screen Modal */}
       <div style={modalStyle}>
-        <div style={modalContentStyle}>
+        <div style={modalContentStyle} ref={modalContentRef}>
           <button
             style={closeButtonStyle}
             onClick={handleClickCloseModal}
@@ -303,11 +350,12 @@ function RightPanel() {
             ×
           </button>
           <React.Suspense fallback="Loading modal content...">
-            {isModalOpen && (
+            {/* single shared instance rendered into the movable DOM node */}
+            {portalReady && remoteNodeRef.current && createPortal(
               <div style={{ marginTop: '40px' }}>
-                <DynamicRemoteApp 
-                  {...webComponentRemoteProps} remoteConfig={webComponentRemoteConfig} isModalOpen={isModalOpen} />
-              </div>
+                <DynamicRemoteApp {...webComponentRemoteProps} remoteConfig={webComponentRemoteConfig} isModalOpen={isModalOpen} />
+              </div>,
+              remoteNodeRef.current
             )}
           </React.Suspense>
         </div>
