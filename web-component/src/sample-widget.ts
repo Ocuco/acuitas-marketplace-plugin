@@ -100,7 +100,7 @@ export class SampleWidget extends LitElement {
                 <div class="image-list">
                   ${this.imaging.images.map(image => html`
                     <div class="image-item">
-                      <span class="text-small">📷 ${image.id} (${image.fileName})</span>
+                      <span class="text-small">📷 ${image.id !== this.imaging.selectedImage?.id ? `${image.fileName}`: html`<strong>${image.fileName}</strong>`}</span>
                     </div>
                   `)}
                 </div>

@@ -3,6 +3,8 @@ import { useState } from 'react'
 import './RightPanel.css'
 import { ImagingWebComponentWrapper } from "../ImagingWebComponentWrapper";
 import { ModalEventDetail, PluginProps, TokenRequestDetail } from '@acuitas/shared';
+import { useAppSelector } from '../store/hooks'
+import { selectImages, selectSelectedImage } from '../store/selectors'
 
 import {
   __federation_method_getRemote as getRemote,
@@ -104,8 +106,12 @@ const DynamicRemoteApp: React.FC<DynamicRemoteProps> = ({ remoteConfig, ...props
 };
 
 function RightPanel() {
-
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  
+  // Get imaging state from Redux store - this connects the RightPanel to centralized state
+  const images = useAppSelector(selectImages)
+  const selectedImage = useAppSelector(selectSelectedImage)
+  
   const webComponentRemoteConfig: RemoteConfig = {
     url: "http://localhost:9001/assets/remoteEntry.js", 
     name: "sampleWidget",
@@ -159,12 +165,16 @@ function RightPanel() {
     },
     imaging: {
       patientId: '3e87af32-a498-4174-9f59-9fa6865d4597',
-      images: [
-        { id: '95800790-5E70-4083-BE05-59B97583F5F4', fileName: '95800790-5E70-4083-BE05-59B97583F5F4.jpg' },
-        { id: '76538477-D664-4620-9BE2-40AD604CA8FC', fileName: '76538477-D664-4620-9BE2-40AD604CA8FC.jpg' },
-        { id: '43AC4C75-8EBD-4898-9513-75811300CFE7', fileName: '43AC4C75-8EBD-4898-9513-75811300CFE7.jpg' },
-      ],
-      selectedImage: null
+      // Convert Redux images to the expected Image interface format
+      images: images.map(img => ({
+        id: img.id,
+        fileName: img.name
+      })),
+      // Convert selected image to the expected format
+      selectedImage: selectedImage ? {
+        id: selectedImage.id,
+        fileName: selectedImage.name
+      } : null
     },
     onOpenModal: handleOpenModal,
     onCloseModal: handleCloseModal,
