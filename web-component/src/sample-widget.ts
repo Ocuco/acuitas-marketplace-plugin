@@ -31,6 +31,7 @@ export class SampleWidget extends LitElement {
 
   @property({ type: Object })
   imaging: ImagingProps = {
+    patientId: '',
     images: [],
     selectedImage: null
   };
@@ -196,12 +197,13 @@ export class SampleWidget extends LitElement {
   private async _analyzeImages() {
     // First we have to request the token to access the images  
     if (this.onRequestToken) {
+      // Get a token for both patient details and medical images with patient ID and image IDs
       const tokenResponse = this.onRequestToken({
         pluginId: this.id,
         pluginName: this.name,
         context: this.context,
-        subjectType: 'MEDICAL-IMAGE',
-        subjectIds: this.imaging.selectedImage ? [this.imaging.selectedImage.id] : this.imaging.images.map((img: { id: any; }) => img.id),
+        subjectTypes: ['MEDICAL-IMAGE', 'PATIENT-DETAILS', 'CONFIGURATION-CAMERA'],
+        subjectIds: [this.imaging.patientId, ...(this.imaging.selectedImage ? [this.imaging.selectedImage.id] : this.imaging.images.map((img: { id: any; }) => img.id))],
       });
       console.log('Token received:', tokenResponse);
       
