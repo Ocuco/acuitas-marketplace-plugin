@@ -4,8 +4,8 @@ import ImagingViewer from './ImagingViewer'
 function MainContent() {
   return (
     <main className="main-content bg-main p-md">
-      <div className="content-header mb-md">
-        <nav className="breadcrumb mb-sm">
+      <div className="content-header">
+        <nav className="breadcrumb">
           <span className="text-secondary">Imaging</span> 
           <span className="text-secondary"> / </span> 
           <span className="text-primary">Medical Images</span>

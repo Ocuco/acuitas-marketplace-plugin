@@ -64,3 +64,45 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Improved legibility for preformatted (detailed report) text */
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Segoe UI Mono', 'Courier New', monospace;
+  font-size: 13px; /* slightly larger than default */
+  line-height: 1.5;
+  white-space: pre-wrap; /* allow wrapping while preserving whitespace */
+  word-break: break-word;
+  tab-size: 4;
+  padding: 12px 16px;
+  margin: 0 0 1rem 0;
+  background: rgba(0,0,0,0.7);
+  color: #f6f8fa;
+  border-radius: 8px;
+  overflow: auto;
+  max-height: 60vh;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+/* Lighter variant for light theme */
+@media (prefers-color-scheme: light) {
+  pre,
+  .detailed-report pre {
+    background: #f6f8fa;
+    color: #0b1220;
+    border: 1px solid rgba(11,18,32,0.06);
+  }
+}
+
+/* Improved scrollbar for WebKit */
+pre::-webkit-scrollbar {
+  height: 10px;
+  width: 10px;
+}
+pre::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 6px;
+}
+pre::-webkit-scrollbar-track {
+  background: transparent;
+}
