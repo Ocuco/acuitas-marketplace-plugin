@@ -1,0 +1,32 @@
+{
+  "name": "@acuitas/shared",
+  "version": "1.0.0",
+  "description": "Shared types and design system for Acuitas Marketplace Plugins",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "acuitas",
+    "medical-imaging",
+    "types",
+    "design-system",
+    "federation"
+  ],
+  "author": "Acuitas Development Team",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist/**/*",
+    "css/**/*",
+    "README.md"
+  ],
+  "publishConfig": {
+    "registry": "http://your-private-npm-registry.com"
+  }
+}

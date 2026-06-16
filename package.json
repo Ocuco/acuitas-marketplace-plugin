@@ -1,0 +1,34 @@
+{
+  "name": "vite-mf-poc",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "bp": "npm run bp:all",
+    "bp:all": "concurrently \"npm run bp:web\" \"npm run bp:host\" \"npm run bp:api\"",
+    "bp:host": "cd host-app && npm run bp",
+    "bp:web": "cd web-component && npm run bp",
+    "bp:api": "cd api-server && npm run dev",
+    "install:all": "npm install && cd acuitas-shared && npm run build && cd ../host-app && npm install && cd ../web-component && npm install && cd ../api-server && npm install",
+    "dev:all": "concurrently \"npm run dev:web\" \"npm run dev:host\" \"npm run dev:api\"",
+    "dev:host": "cd host-app && npm run dev",
+    "dev:web": "cd web-component && npm run dev",
+    "dev:api": "cd api-server && npm run dev",
+    "dev:hot:all": "concurrently \"npm run dev:hot:web\" \"npm run dev:hot:host\" \"npm run dev:hot:api\"",
+    "dev:hot:host": "cd host-app && npm run dev:hot",
+    "dev:hot:web": "cd web-component && npm run dev:hot",
+    "dev:hot:api": "cd api-server && npm run dev",
+    "build:all": "npm run build:web && npm run build:host && npm run build:api",
+    "build:host": "cd host-app && npm run build",
+    "build:web": "cd web-component && npm run build",
+    "build:api": "cd api-server && npm run build"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "workspaces": [
+    "host-app",
+    "web-component",
+    "api-server"
+  ]
+}

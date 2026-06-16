@@ -1,0 +1,65 @@
+/*
+ * Styles for the marketplace web-component widgets.
+ *
+ * Loaded two ways:
+ *   1. Inlined into each widget's shadow DOM (`?inline` import in *-widget.ts).
+ *   2. As the stylesheet for the standalone demo harness (index.html).
+ *
+ * These widgets ship as a federated remote that loads into the A3 host via
+ * module federation, so the CSS must NOT style the host document. Every rule
+ * is scoped to the widget's own container (`.plugin-container`) — no global
+ * `:root`/`html`/`body` theming, and crucially no `color-scheme` on `:root`.
+ * `color-scheme` is inherited and leaks to the host: on a dark-mode OS it makes
+ * the browser render native controls (select popups, scrollbars, date pickers)
+ * dark across all of A3, which has no dark theme.
+ */
+
+.plugin-container {
+  /* Keep the widget's own native controls light regardless of OS theme,
+     scoped to the widget so it cannot leak into the host page. */
+  color-scheme: light;
+
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+/* Flatten the widget's card surface — the host panel provides the framing.
+   The modal surface (.card with a .modal-header) is already borderless. */
+.card {
+  border: none;
+  box-shadow: none;
+}
+
+/* Improved legibility for preformatted (detailed report) text */
+pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Segoe UI Mono', 'Courier New', monospace;
+  font-size: 13px; /* slightly larger than default */
+  line-height: 1.5;
+  white-space: pre-wrap; /* allow wrapping while preserving whitespace */
+  word-break: break-word;
+  tab-size: 4;
+  padding: 12px 16px;
+  margin: 0 0 1rem 0;
+  background: rgba(0,0,0,0.7);
+  color: #f6f8fa;
+  border-radius: 8px;
+  overflow: auto;
+  max-height: 60vh;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.06);
+}
