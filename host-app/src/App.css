@@ -1,0 +1,69 @@
+/* Application Layout using Acuitas Design System */
+
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--background-secondary);
+  font-family: var(--font-family);
+}
+
+.app-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Custom application-specific styles that extend Acuitas Design System */
+
+/* Override hover effect for buttons to be more subtle */
+.btn:hover {
+  transform: none; /* Remove the transform effect as Acuitas handles hover states */
+}
+
+/* Additional layout utilities if needed beyond Acuitas */
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+/* Right-panel collapsible segment headers (shared by all right panels) */
+.right-panel .segment-header {
+  background: #ffffff;
+  border-bottom: 1px solid #d9dee3;
+  padding: 12px 14px;
+}
+
+.right-panel .segment-header h6 {
+  color: #13294b;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.right-panel .segment-header .collapse-icon {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border: 0;
+  border-right: 2px solid #13294b;
+  border-bottom: 2px solid #13294b;
+  margin-bottom: 3px;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.right-panel .segment-header .collapse-icon.collapsed {
+  transform: rotate(-45deg);
+}
+
+/* Right panel: flat sections — no card borders/shadows. Only the segment
+   title keeps its full-width bottom divider (defined above). */
+.right-panel .card {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sample Web Component Demo</title>
+    <link rel="stylesheet" href="./src/index.css" />
+    <!-- Registers the <imaging-widget> custom element. Swap this for
+         ./src/patient-widget.ts to preview the patient widget instead. -->
+    <script type="module" src="/src/imaging-widget.ts"></script>
+  </head>
+  <body>
+    <div style="padding: 20px;">
+      <!-- The element is created here, but all of its inputs are objects and
+           functions, so they are set as DOM *properties* in the script below —
+           not as HTML attributes. This mirrors exactly how the Acuitas host
+           mounts and feeds the widget at runtime. -->
+      <imaging-widget></imaging-widget>
+    </div>
+
+    <script type="module">
+      // Standalone dev harness: this stands in for the Acuitas host. It sets the
+      // same properties the host would set and provides the same callbacks, so
+      // you can exercise the widget locally with `yarn dev`.
+      document.addEventListener('DOMContentLoaded', () => {
+        const widget = document.querySelector('imaging-widget');
+        if (!widget) return;
+
+        // --- Host-provided context (who/where the widget is running) ---
+        widget.id = 'medical-imaging-widget-001';
+        widget.name = 'Medical Image Analysis Widget';
+
+        widget.context = {
+          environment: 'SANDBOX',
+          customerId: 'CUSTOMER_001',
+          siteId: 'SITE_MAIN',
+          staffId: 'STAFF_001'
+        };
+
+        widget.screen = {
+          view: 'MEDICAL_IMAGES',
+          maxWidth: 400,
+          maxHeight: 600
+        };
+
+        // Per-plugin configuration. `apiUrl` is where the widget calls its own
+        // backend (defaults to http://localhost:3001 inside the widget if unset).
+        widget.settings = {
+          apiUrl: 'http://localhost:3001'
+        };
+
+        // --- Domain data for the imaging screen ---
+        widget.imaging = {
+          patientId: '3e87af32-a498-4174-9f59-9fa6865d4597',
+          images: [
+            { id: '76538477-D664-4620-9BE2-40AD604CA8FC', fileName: 'IMG_CT_20240115_001.jpg' },
+            { id: '95800790-5E70-4083-BE05-59B97583F5F4', fileName: 'IMG_CT_20240115_002.jpg' },
+            { id: '43AC4C75-8EBD-4898-9513-75811300CFE7', fileName: 'IMG_MRI_20240116_001.jpg' }
+          ],
+          // Pre-select the first image so the "Analyze Image" button is enabled.
+          selectedImage: { id: '76538477-D664-4620-9BE2-40AD604CA8FC', fileName: 'IMG_CT_20240115_001.jpg' }
+        };
+
+        // --- Callbacks the host injects ---
+
+        // The widget calls this to ask for a scoped, short-lived token. In the
+        // real host this returns a signed bearer token; here we just echo a stub
+        // so the widget can demonstrate its API call (which will 401/fail unless
+        // you also run a backend at `settings.apiUrl`).
+        widget.onRequestToken = async detail => {
+          console.log('Token requested', JSON.stringify(detail, null, 2));
+          return {
+            detail,
+            token: '<generated-token>'
+          };
+        };
+
+        // The widget calls these when it wants to expand/collapse. The host owns
+        // the modal state, so we flip `isModalOpen` back on the element.
+        widget.onOpenModal = detail => {
+          console.log('Open modal requested', JSON.stringify(detail));
+          widget.isModalOpen = true;
+        };
+
+        widget.onCloseModal = detail => {
+          console.log('Close modal requested', JSON.stringify(detail));
+          widget.isModalOpen = false;
+        };
+      });
+    </script>
+  </body>
+</html>
