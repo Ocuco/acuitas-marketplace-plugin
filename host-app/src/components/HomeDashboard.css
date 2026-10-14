@@ -1,0 +1,90 @@
+.home-dashboard {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.home-dashboard .content-header {
+  padding: 8px 4px 16px;
+}
+
+.home-dashboard-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 24px;
+}
+
+.dashboard-category-title {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.dashboard-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dashboard-tile {
+  position: relative;
+  width: 120px;
+  height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  box-sizing: border-box;
+  background: #f4f6f8;
+  border: 1px solid #e2e7ec;
+  border-radius: 4px;
+  text-align: center;
+  font: inherit;
+  color: inherit;
+}
+
+.dashboard-tile-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.dashboard-tile-label {
+  font-size: 12px;
+  color: #13294b;
+  line-height: 1.2;
+}
+
+/* Partner plugin launcher tile — clickable, with a subtle accent. */
+.dashboard-tile-plugin {
+  cursor: pointer;
+  background: #ffffff;
+  border-color: #0049b8;
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.dashboard-tile-plugin:hover {
+  box-shadow: 0 4px 12px rgba(0, 73, 184, 0.18);
+  transform: translateY(-1px);
+}
+
+.dashboard-tile-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  background: #0049b8;
+  border-radius: 3px;
+  padding: 1px 5px;
+}

@@ -1,0 +1,63 @@
+/* Header component styles - using Acuitas Design System */
+
+/* Custom styles that extend the app-bar class */
+.logo-icon img {
+  height: 2rem;
+  width: auto;
+}
+
+.logo-text {
+  color: var(--app-bar-text);
+  font-size: var(--font-size-header);
+  font-weight: var(--font-weight-header);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.logo-icon {
+  font-size: 24px;
+}
+
+.logo-text {
+  color: #ecf0f1;
+}
+
+/* Screen navigation tabs */
+.app-nav {
+  margin-left: 2rem;
+}
+
+.nav-tab {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--app-bar-text, #ecf0f1);
+  cursor: pointer;
+  display: inline-block;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.2;
+  opacity: 0.75;
+  padding: 0.75rem 1rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nav-tab:hover {
+  color: var(--app-bar-text, #ecf0f1);
+  opacity: 1;
+}
+
+.nav-tab.active {
+  border-bottom-color: var(--app-bar-text, #ecf0f1);
+  color: var(--app-bar-text, #ecf0f1);
+  font-weight: 600;
+  opacity: 1;
+}
+

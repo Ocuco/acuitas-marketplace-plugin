@@ -1,0 +1,43 @@
+.partner-module-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.partner-module-page .content-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.partner-module-page .breadcrumb {
+  font-size: 14px;
+}
+
+.partner-module-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  background: #ffffff;
+}
+
+/* Custom elements default to inline; make the module fill the page area. */
+.partner-module-body dashboard-widget {
+  display: block;
+  height: 100%;
+}
+
+.partner-module-body .remote-app-wrapper {
+  height: 100%;
+}
+
+.partner-module-footer {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 20px;
+  border-top: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
