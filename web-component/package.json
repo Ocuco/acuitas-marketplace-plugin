@@ -1,0 +1,28 @@
+{
+  "name": "remote-b",
+  "private": true,
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 9001",
+    "dev:hot": "concurrently \"node --watch-path=src --watch-preserve-output scripts/build-on-change.mjs\" \"vite preview --port 9001 --strictPort\"",
+    "build": "tsc && vite build",
+    "package": "npm run build && node scripts/package.mjs",
+    "preview": "vite preview --port 9001",
+    "bp": "tsc && vite build && vite preview"
+  },
+  "dependencies": {
+    "@acuitas/shared": "file:../acuitas-shared",
+    "lit": "^3.3.3"
+  },
+  "devDependencies": {
+    "@originjs/vite-plugin-federation": "^1.4.1",
+    "fflate": "^0.8.3",
+    "typescript": "^7.0.2",
+    "vite": "~7.3.7"
+  },
+  "allowScripts": {
+    "esbuild": true
+  }
+}

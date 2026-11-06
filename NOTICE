@@ -1,0 +1,36 @@
+Acuitas Marketplace Plugin Development Kit
+Copyright 2026 Ocuco Ltd
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+The license covers the source code, styles and documentation in this
+repository, with the exceptions below.
+
+Acuitas Design System
+---------------------
+acuitas-shared/css/acuitas-design-system.css, and its copy in
+host-app/src/assets/acuitas-design-system.css, are not licensed under the
+Apache License. They are licensed only under the Acuitas Design System
+License in acuitas-shared/css/LICENSE, which permits their use solely to
+develop, test and distribute plugins for the Acuitas Marketplace.
+
+Trademarks
+----------
+"Ocuco", "Acuitas" and "Acuitas 3", and the Ocuco logos in
+host-app/public/logo.png and host-app/public/favicon.ico, are trademarks of
+Ocuco Ltd. As section 6 of the License states, it grants no permission to use
+them, except as required for reasonable and customary use in describing the
+origin of the work, such as stating that a plugin is built for, or compatible
+with, Acuitas. The logo files may be used only to run this development kit
+unchanged and may not be used in your own plugins or products.
+
+Sample images
+-------------
+The images in host-app/src/assets/imaging are not licensed under the Apache
+License. They are provided only so that the development kit can be run and
+tested, and may not be redistributed separately or used for any other purpose.
+
+Third-party files
+-----------------
+web-component/public/vite.svg is the Vite logo, from the Vite project
+(https://vite.dev), released under the MIT License, Copyright (c)
+2019-present, VoidZero Inc. and Vite contributors.
