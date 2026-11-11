@@ -1,0 +1,22 @@
+# Dependencies (root workspace and every package)
+node_modules/
+
+# Build output
+dist/
+*.tsbuildinfo
+marketplace-upload/
+
+# Environment files - api-server reads Marketplace credentials from these
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Editor and OS files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db

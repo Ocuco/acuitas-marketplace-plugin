@@ -1,0 +1,34 @@
+Acuitas Design System License
+
+Copyright 2026 Ocuco Ltd. All rights reserved.
+
+The Acuitas Design System (acuitas-design-system.css, and any copy of it in
+this repository) is not licensed under the Apache License, Version 2.0 that
+covers the rest of this repository. It is licensed only under the terms below.
+
+1. Permitted use. Ocuco Ltd grants you a non-exclusive, worldwide,
+   royalty-free, non-transferable license to use, copy and modify the Acuitas
+   Design System solely to develop, test and distribute plugins for the
+   Acuitas Marketplace that run within Acuitas.
+
+2. Distribution. You may distribute the Acuitas Design System, modified or
+   not, only as part of such a plugin, and you must keep this license and the
+   copyright notice with it. You may not distribute it on its own, or as part
+   of any other product, library, theme or design system.
+
+3. No other use. You may not use the Acuitas Design System, or any part of
+   it, to style or build any software, website or other product that is not
+   an Acuitas Marketplace plugin, or to imitate the appearance of Acuitas or
+   other Ocuco products.
+
+4. Trademarks. This license grants no rights in the names "Ocuco", "Acuitas"
+   or "Acuitas 3", or in any Ocuco logo.
+
+5. Termination. This license ends automatically if you breach it. You must
+   then stop using the Acuitas Design System and delete all copies of it that
+   you hold.
+
+6. No warranty. The Acuitas Design System is provided "AS IS", WITHOUT
+   WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. To the
+   extent permitted by law, Ocuco Ltd is not liable for any damages arising
+   from its use.

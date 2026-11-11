@@ -1,0 +1,9 @@
+# Check text files out with LF line endings on every OS, whatever the
+# developer's core.autocrlf setting, so they match biome.json's
+# "lineEnding": "lf" on Windows, Linux and macOS alike. Git still decides
+# what is text, so images and other binaries are left untouched.
+* text=auto eol=lf
+
+# Windows batch files need CRLF to run under cmd.exe.
+*.cmd text eol=crlf
+*.bat text eol=crlf

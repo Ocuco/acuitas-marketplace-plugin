@@ -1,0 +1,6 @@
+# Environment files - the api-server reads Marketplace credentials and secrets from these
+.env
+.env.local
+
+# Policy data written by the webhook receiver (Level 5 of the tutorials)
+data/
